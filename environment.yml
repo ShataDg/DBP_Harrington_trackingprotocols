@@ -1,0 +1,8 @@
+name: snc
+channels:
+  - conda-forge
+dependencies:
+  - pyimagej
+  - openjdk=11
+  - matplotlib
+  - jupyterlab
