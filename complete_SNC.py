@@ -37,7 +37,7 @@ params = {
     'threshold': 0.5,  # Quality threshold
     'medianfilter': True,  # Pre-process with median filter
     'subpixel': True,  # Sub-pixel localization
-    'channel': 1,  # Channel
+    'channel': JInt(1),  # Channel
     'quality': 1.2,  # Spot detection quality filter
     'link_distance': 15.0,  # Linking max distance; Default value is 15
     'gap_distance': 15.0,  # # Gap closing will not occur for two spots if their distance exceeds this value; Default value is 15
