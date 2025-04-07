@@ -8,7 +8,6 @@
 
 import os
 import sys
-from tokenize import Double3
 import imagej
 import scipy.ndimage
 import numpy as np
@@ -17,7 +16,7 @@ import matplotlib.pyplot as plt
 import scyjava as sj
 from jpype import JInt
 from imagej._java import jc
-sj.config.add_option('-Xmx6g')
+sj.config.add_option('-Xmx6g') # make into a param
 
 import code # for debugging -- remove later
 
@@ -258,6 +257,7 @@ def process_tracks(
     df: pd.DataFrame,
     label_image,
     raw_image,
+    params,
     max_event_frame: int = 500,
     min_event_frames_for_good: int = 60,
     event_ext: int = 0,
@@ -342,7 +342,8 @@ def process_tracks(
     pre_filter_df = pre_filter_df.T
     pre_filter_df['timepoint'] = pre_filter_df.index
     pre_filter_df.dropna(axis='columns', how='all', inplace=True)
-    pre_filter_df.to_csv('pre_filter.csv')
+    #pre_filter_df.to_csv('pre_filter.csv')
+    pre_filter_df.to_csv(os.path.join(params['output_dir'], 'pre_filter.csv'))  # Modified line
 
     # filter good cells/tracks -- here you can choose the min number of frames for good tracks
     good_tracks = []
@@ -361,7 +362,8 @@ def process_tracks(
         post_filter_df[frame] = scipy.ndimage.mean(raw_image[frame], labels=label_image[frame], index=good_tracks)
     post_filter_df = post_filter_df.T
     post_filter_df.dropna(axis='columns', how='all', inplace=True)
-    post_filter_df.to_csv('post_filter.csv')
+    #post_filter_df.to_csv('post_filter.csv')
+    post_filter_df.to_csv(os.path.join(params['output_dir'], 'post_filter.csv'))  # Modified line
 
     # measure the mean intensity of the entire, left and right side of the image
     y0 = []
@@ -391,7 +393,7 @@ if __name__ == "__main__":
     params = setup()
     print(params)
     detection_results = detection(params)
-    process_tracks(detection_results['tracks'], detection_results['label_image'], detection_results['raw_image'])
+    process_tracks(detection_results['tracks'], detection_results['label_image'], detection_results['raw_image'], params)
 
     # return REPL
     code.interact(local=locals())
